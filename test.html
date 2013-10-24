@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+
+<link href='http://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+
+<title>Hiisi Soundboard</title>
+
+<script>
+
+    // String.prototype.trim() shim
+    if(!String.prototype.trim) {
+        String.prototype.trim = function () {
+            return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+        };
+    }
+
+    var html5_audiotypes={ //define list of audio file extensions and their associated audio types. Add to it if your specified audio file isn't on this list:
+        "mp3": "audio/mpeg",
+        "mp4": "audio/mp4",
+        "ogg": "audio/ogg",
+        "wav": "audio/wav"
+    }
+
+    function createsoundbite(sound){
+        var html5audio=document.createElement('audio')
+        if (html5audio.canPlayType){ //check support for HTML5 audio
+            for (var i=0; i<arguments.length; i++){
+                var sourceel=document.createElement('source')
+                sourceel.setAttribute('src', arguments[i])
+                if (arguments[i].match(/\.(\w+)$/i))
+                    sourceel.setAttribute('type', html5_audiotypes[RegExp.$1])
+                html5audio.appendChild(sourceel)
+            }
+            html5audio.load()
+            html5audio.playclip=function(){
+                html5audio.pause()
+                html5audio.currentTime=0
+                html5audio.play()
+            }
+            return html5audio
+        }
+        else{
+            return {playclip:function(){throw new Error("Your browser doesn't support HTML5 audio unfortunately")}}
+        }
+    }
+
+    var clicksounds = [
+        [9000, createsoundbite("hiisi1.mp3")],
+        [3000, createsoundbite("hiisi2.mp3")],
+        [5600, createsoundbite("hiisi3.mp3")],
+        [6000, createsoundbite("hiisi4.mp3")],
+        [4800, createsoundbite("hiisi5.mp3")],
+        [3000, createsoundbite("hiisi6.mp3")],
+        [3000, createsoundbite("hiisi7.mp3")],
+        [4500, createsoundbite("hiisi8.mp3")],
+        [3500, createsoundbite("hiisi9.mp3")]
+    ];
+
+</script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    body, html {
+        font-family: 'Fjalla One';
+        text-transform: uppercase;
+        height: 100%;
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        overflow: hidden;
+    }
+    .description {
+        height: 10%;
+        background: #333;
+        color: #fff;
+        position: relative;
+    }
+    .description h1 {
+        position: relative;
+        top: 50%;
+        font-size: 16px;
+        line-height: 0;
+    }
+    a.area {
+        display: block;
+        height: 200px;
+        width:  33.333%;
+        float: left;
+        font-size: 19px;
+        text-decoration: none;
+        opacity: .8;
+    }
+    a.area:hover {
+        opacity: 1;
+    }
+    a.area p {
+        position: relative;
+        top: 50%;
+        color: #fff;
+        line-height: 0;
+    }
+    .hiisi {
+        background: url('jussi-virtanen.jpg');
+        background-size: cover;
+    }
+    .hiisi-alt {
+        background: url('jussi-virtanen2.jpg');
+    }
+
+    .party a, .party a:visited {
+        color: #5ba2c4;
+        text-decoration: none;
+    }
+    .color1 {
+        background: #62ac28;
+    }
+    .color2 {
+        background: #5ba2c4;
+    }
+    .color3 {
+        background: #3964b1;
+    }
+    .color4 {
+        background: #0c17a0;
+    }
+    .color5 {
+        background: #5500a0;
+    }
+    .color6 {
+        background: #a80079;
+    }
+    .color7 {
+        background: #db0000;
+    }
+    .color8 {
+        background: #e06618;
+    }
+    .withlove {
+        position: relative;
+        height: 10%;
+        background: #333;
+        color: #fff;
+        clear: both;
+    }
+    .withlove p {
+        position: relative;
+        top: 40%;
+        font-size: 16px;
+        line-height: 16px;
+    }
+    a {
+        text-decoration: none;
+    }
+    a:visited {
+        color: white;
+
+    }
+</style>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script>
+    $(function() {
+
+        $("a[data-action]").click(function (evt) {
+            evt.preventDefault();
+            var $this = $(this),
+                    action = $this.data('action');
+            if (action === 'play') {
+                clicksounds[$this.data('tile') -1][1].playclip();
+            }
+            $('.hiisi').addClass('hiisi-alt');
+
+            setTimeout(function(){
+                $('.hiisi').removeClass('hiisi-alt');
+            }, clicksounds[$this.data('tile') -1][0]);
+            console.log(clicksounds[$this.data('tile') -1]);
+        })
+    })
+
+</script>
+</head>
+
+<body>
+
+    <div class="description">
+        <h1>Mitä Hiisi sanoo?</h1>
+    </div>
+    <a href="#" data-action="play" data-tile=1 class="area color1">
+        <p>Vihaisena</p>
+    </a>
+    <a href="#" data-action="play" data-tile=2 class="area color2">
+        <p>Huonosta designista</p>
+    </a>
+    <a href="#" data-action="play" data-tile=3 class="area color3">
+        <p>Kaupintien hississä</p>
+    </a>
+    <a href="#" data-action="play" data-tile=4 class="area color4">
+        <p>"Roskakori" -logosta</p>
+    </a>
+
+    <a href="#" data-action="play" data-tile=5 class="area hiisi">
+
+    </a>
+    <a href="#" data-action="play" data-tile=6 class="area color5">
+        <p>Lattekavhin lopuessa</p>
+    </a>
+    <a href="#" data-action="play" data-tile=7 class="area color6">
+        <p>Kuorsatessaan</p>
+    </a>
+    <a href="#" data-action="play" data-tile=8 class="area color7">
+        <p>Tytöistä</p>
+    </a>
+    <a href="#" data-action="play" data-tile=9 class="area color8">
+        <p>Larpatessaan</p>
+    </a>
+    <div class="withlove">
+        <p>Rakkaudella: <a href="http://fraktio.fi">Fraktio</a></p>
+    </div>
+
+</body>
+</html>
